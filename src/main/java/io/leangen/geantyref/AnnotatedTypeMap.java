@@ -6,7 +6,6 @@
 package io.leangen.geantyref;
 
 import java.lang.reflect.AnnotatedType;
-import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static io.leangen.geantyref.GenericTypeReflector.toCanonical;
 
@@ -117,10 +115,7 @@ public class AnnotatedTypeMap<K extends AnnotatedType, V> implements Map<K, V> {
      */
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-        Map<? extends K, ? extends V> canonical =  m.entrySet().stream()
-                .map(e -> new AbstractMap.SimpleEntry<>(toCanonical(e.getKey()), e.getValue()))
-                .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
-        inner.putAll(canonical);
+        m.forEach(this::put);
     }
 
     /**
